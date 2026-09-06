@@ -1,0 +1,41 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Arabiya",
+  "scopeName": "source.arabiya",
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#strings" },
+    { "include": "#keywords" },
+    { "include": "#builtins" },
+    { "include": "#numbers" }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [{ "name": "comment.line.number-sign.arabiya", "match": "#.*$" }]
+    },
+    "strings": {
+      "patterns": [
+        { "name": "string.quoted.double.arabiya", "begin": "\"", "end": "\"", "patterns": [{ "name": "constant.character.escape.arabiya", "match": "\\\\." }] },
+        { "name": "string.quoted.single.arabiya", "begin": "'", "end": "'", "patterns": [{ "name": "constant.character.escape.arabiya", "match": "\\\\." }] }
+      ]
+    },
+    "keywords": {
+      "patterns": [{
+        "name": "keyword.control.arabiya",
+        "match": "(?<![\\p{L}\\p{N}_])(إن|وإلا_إن|وإلا|ما_دام|لكل|ضمن|عرف|أعد|صنف|استورد|من|جرب|التقط|ختاما|توقف|تابع|تجاوز|ارم|مع|باسم|ليس|و|أو|هو|احذف|تحقق|عام|غير_محلي|لامبدا|غير_متزامن|انتظر|انتج|طابق|حالة|نوع)(?![\\p{L}\\p{N}_])"
+      }, {
+        "name": "constant.language.arabiya",
+        "match": "(?<![\\p{L}\\p{N}_])(صحيح|كاذب|عدم)(?![\\p{L}\\p{N}_])"
+      }]
+    },
+    "builtins": {
+      "patterns": [{
+        "name": "support.function.builtin.arabiya",
+        "match": "(?<![\\p{L}\\p{N}_])(اطبع|طول|نطاق|قائمة|قاموس|مجموع|اصغر|اكبر|عدد|نص|خطأ_قيمة|خطأ_مفتاح)(?![\\p{L}\\p{N}_])"
+      }]
+    },
+    "numbers": {
+      "patterns": [{ "name": "constant.numeric.arabiya", "match": "(?<![\\p{L}\\p{N}_])\\d+(?:\\.\\d+)?(?![\\p{L}\\p{N}_])" }]
+    }
+  }
+}

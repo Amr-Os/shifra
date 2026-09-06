@@ -1,0 +1,94 @@
+{
+  "name": "arabiya-language",
+  "displayName": "Arabiya Language",
+  "description": "RTL editing and language support for Arabic RustPython (.ar) files.",
+  "version": "0.1.0",
+  "publisher": "arabiya-local",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Other"
+  ],
+  "main": "./extension.js",
+  "activationEvents": [
+    "onCustomEditor:arabiya.rtlEditor",
+    "onCommand:arabiya.openRtlEditor"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "arabiya",
+        "aliases": ["Arabiya", "العربية البرمجية"],
+        "extensions": [".ar"],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "arabiya",
+        "scopeName": "source.arabiya",
+        "path": "./syntaxes/arabiya.tmLanguage.json"
+      }
+    ],
+    "customEditors": [
+      {
+        "viewType": "arabiya.rtlEditor",
+        "displayName": "Arabiya RTL Editor",
+        "selector": [
+          {
+            "filenamePattern": "*.ar"
+          }
+        ],
+        "priority": "default"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "arabiya",
+        "path": "./snippets/arabiya.code-snippets"
+      }
+    ],
+    "commands": [
+      {
+        "command": "arabiya.openRtlEditor",
+        "title": "Arabiya: Open RTL Editor"
+      }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "command": "arabiya.openRtlEditor",
+          "when": "resourceLangId == arabiya",
+          "group": "navigation"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Arabiya RTL Editor",
+      "properties": {
+        "arabiya.rtlEditor.fontFamily": {
+          "type": "string",
+          "default": "Cascadia Code, Noto Sans Arabic, monospace",
+          "description": "Font family used by the RTL .ar editor."
+        },
+        "arabiya.rtlEditor.fontSize": {
+          "type": "number",
+          "default": 16,
+          "minimum": 8,
+          "maximum": 48,
+          "description": "Font size used by the RTL .ar editor."
+        },
+        "arabiya.rtlEditor.tabSize": {
+          "type": "number",
+          "default": 4,
+          "minimum": 1,
+          "maximum": 16,
+          "description": "Visual width of indentation tabs in the RTL .ar editor."
+        }
+      }
+    }
+  }
+}
