@@ -3283,6 +3283,7 @@ dependencies = [
  "pyo3",
  "rustls",
  "rustls-graviola",
+ "rustpython-arabiya",
  "rustpython-capi",
  "rustpython-compiler",
  "rustpython-pylib",
@@ -3291,6 +3292,13 @@ dependencies = [
  "rustpython-vm",
  "rustyline",
  "winresource",
+]
+
+[[package]]
+name = "rustpython-arabiya"
+version = "0.1.0"
+dependencies = [
+ "rustpython-vm",
 ]
 
 [[package]]

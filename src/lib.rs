@@ -221,6 +221,10 @@ fn run_file(vm: &VirtualMachine, scope: Scope, argv0: &str) -> PyResult<()> {
     // when the script was named relative to the working directory.
     let path = &abs_path(argv0);
 
+    if is_shifra_file(path) {
+        return run_shifra_file(vm, scope, path);
+    }
+
     // Check if path is a package/directory with __main__.py
     if let Some(_importer) = get_importer(path, vm)? {
         vm.insert_sys_path(vm.new_pyobj(path.clone()))?;
@@ -247,6 +251,29 @@ fn run_file(vm: &VirtualMachine, scope: Scope, argv0: &str) -> PyResult<()> {
             }
         }
     }
+}
+
+/// Shifra (`.ar`) files translate Arabic keywords to Python before compilation,
+/// then run with Arabic builtins installed. This mirrors the bootstrap runner
+/// in `examples/arabiya.rs` until native lexer support lands.
+fn run_shifra_file(vm: &VirtualMachine, scope: Scope, path: &str) -> PyResult<()> {
+    let source = match std::fs::read_to_string(path) {
+        Ok(source) => source,
+        Err(err) => return Err(vm.new_os_error(err.to_string())),
+    };
+    let translated = rustpython_arabiya::translate(&source);
+    let code = vm
+        .compile(&translated, vm::compiler::Mode::Exec, path)
+        .map_err(|err| err.into_pyexception(vm, Some(&source)))?;
+    rustpython_arabiya::install_builtins(&scope, vm)?;
+    vm.run_code_obj(code, scope)?;
+    Ok(())
+}
+
+fn is_shifra_file(path: &str) -> bool {
+    std::path::Path::new(path)
+        .extension()
+        .is_some_and(|ext| ext == "ar")
 }
 
 fn get_importer(path: &str, vm: &VirtualMachine) -> PyResult<Option<PyObjectRef>> {

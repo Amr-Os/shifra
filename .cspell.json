@@ -71,6 +71,11 @@
   // words - list of words to be always considered correct
   // (compound words like pyarg, baseclass, microbenchmark are handled by allowCompoundWords)
   "words": [
+    // Shifra (شِفرة) project terms
+    "arabiya",
+    "Shifra",
+    "shifra",
+    "हिन्दी",
     "AESGCM",
     "aiterable",
     "alnum",
@@ -137,6 +142,8 @@
   "flagWords": [
   ],
   "ignoreRegExpList": [
+    // Shifra (شِفرة): ignore Arabic script words in code and tests.
+    "[\\u0600-\\u06FF\\u0750-\\u077F\\u08A0-\\u08FF]+"
   ],
   // languageSettings - allow for per programming language configuration settings.
   "languageSettings": [

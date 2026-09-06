@@ -39,6 +39,7 @@ rustpython-compiler = { workspace = true }
 rustpython-pylib = { workspace = true, optional = true }
 rustpython-stdlib = { workspace = true, optional = true, features = ["compiler"] }
 rustpython-vm = { workspace = true, features = ["compiler", "gc"] }
+rustpython-arabiya = { workspace = true, features = ["vm"] }
 
 log = { workspace = true }
 flame = { workspace = true, optional = true }
@@ -182,6 +183,7 @@ rustpython-sre_engine = { path = "crates/sre_engine", version = "0.5.0" }
 rustpython-unicode = { path = "crates/unicode", version = "0.5.0" }
 rustpython-wtf8 = { path = "crates/wtf8", version = "0.5.0" }
 rustpython-doc = { path = "crates/doc", version = "0.5.0" }
+rustpython-arabiya = { path = "crates/arabiya", version = "0.1.0" }
 
 # Use the RustPython Ruff fork for RustPython public `_ast` metadata.
 ruff_python_parser = { package = "rustpython-ruff_python_parser", git = "https://github.com/RustPython/ruff.git", tag = "0.15.19-rustpython" }
