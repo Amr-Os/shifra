@@ -257,6 +257,8 @@ fn run_file(vm: &VirtualMachine, scope: Scope, argv0: &str) -> PyResult<()> {
 /// compilation, then run with Arabic builtins installed. This is the native run
 /// path for Shifra files.
 fn run_shifra_file(vm: &VirtualMachine, scope: Scope, path: &str) -> PyResult<()> {
+    rustpython_arabiya::install_builtins(&scope, vm)?;
+    rustpython_arabiya::install_error_hook(vm)?;
     let source = match std::fs::read_to_string(path) {
         Ok(source) => source,
         Err(err) => return Err(vm.new_os_error(err.to_string())),
@@ -265,7 +267,6 @@ fn run_shifra_file(vm: &VirtualMachine, scope: Scope, path: &str) -> PyResult<()
     let code = vm
         .compile(&translated, vm::compiler::Mode::Exec, path)
         .map_err(|err| err.into_pyexception(vm, Some(&source)))?;
-    rustpython_arabiya::install_builtins(&scope, vm)?;
     vm.run_code_obj(code, scope)?;
     Ok(())
 }
@@ -273,12 +274,14 @@ fn run_shifra_file(vm: &VirtualMachine, scope: Scope, path: &str) -> PyResult<()
 /// Compile a script without executing it. Shifra files are translated first, so
 /// syntax errors are reported against the original Arabic source. Used for live
 /// editor diagnostics (`rustpython --check file`).
-fn check_file(vm: &VirtualMachine, path: &str) -> PyResult<()> {
+fn check_file(vm: &VirtualMachine, scope: Scope, path: &str) -> PyResult<()> {
     let source = match std::fs::read_to_string(path) {
         Ok(source) => source,
         Err(err) => return Err(vm.new_os_error(err.to_string())),
     };
     let (translated, original) = if is_shifra_file(path) {
+        rustpython_arabiya::install_builtins(&scope, vm)?;
+        rustpython_arabiya::install_error_hook(vm)?;
         (rustpython_arabiya::translate(&source), source)
     } else {
         (source.clone(), source)
@@ -408,7 +411,7 @@ fn run_rustpython(vm: &VirtualMachine, run_mode: RunMode) -> PyResult<()> {
         }
         RunMode::Check(script_path) => {
             debug!("Checking script {}", script_path);
-            check_file(vm, &script_path)
+            check_file(vm, scope.clone(), &script_path)
         }
         RunMode::Repl => Ok(()),
     };

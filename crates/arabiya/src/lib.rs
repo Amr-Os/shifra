@@ -8,6 +8,7 @@
 //! crate provides the preprocessor fallback used until then.
 
 pub mod builtins;
+pub mod errors;
 pub mod keywords;
 pub mod methods;
 pub mod modules;
@@ -17,3 +18,5 @@ pub use preprocessor::translate;
 
 #[cfg(feature = "vm")]
 pub use builtins::install_builtins;
+#[cfg(feature = "vm")]
+pub use errors::install_error_hook;
