@@ -7,6 +7,9 @@ use std::{cmp, env};
 
 pub enum RunMode {
     Script(String),
+    /// Compile a script without executing it (`rustpython --check file`). The
+    /// file may be a Shifra (`.sf`) source; it is translated before compiling.
+    Check(String),
     Command(String),
     Module(String),
     InstallPip(InstallPipMode),
@@ -53,6 +56,7 @@ struct CliArgs {
     warning_control: Vec<String>,
     implementation_option: Vec<String>,
     check_hash_based_pycs: CheckHashPycsMode,
+    check: bool,
 
     #[cfg(feature = "flame-it")]
     profile_output: Option<std::ffi::OsString>,
@@ -102,6 +106,7 @@ Options (and corresponding environment variables):
 
 RustPython extensions:
 
+--check   : compile the given script (Shifra `.sf` or Python) without executing it
 
 Arguments:
 file   : program read from script file
@@ -156,6 +161,8 @@ fn parse_args() -> Result<(CliArgs, RunMode, Vec<String>), lexopt::Error> {
                 args.check_hash_based_pycs = parser.value()?.parse()?
             }
 
+            Long("check") => args.check = true,
+
             // TODO: make these more specific
             Long("help-env") => help(parser),
             Long("help-xoptions") => help(parser),
@@ -186,6 +193,8 @@ fn parse_args() -> Result<(CliArgs, RunMode, Vec<String>), lexopt::Error> {
                 let script_name = script_name.string()?;
                 let mode = if script_name == "-" {
                     RunMode::Repl
+                } else if args.check {
+                    RunMode::Check(script_name.clone())
                 } else {
                     RunMode::Script(script_name.clone())
                 };

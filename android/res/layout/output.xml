@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:background="@color/bg"
+    android:layoutDirection="rtl">
+
+    <TextView
+        android:id="@+id/meta"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text_dim"
+        android:textSize="14sp"
+        android:gravity="start"
+        android:paddingBottom="6dp"/>
+
+    <TextView
+        android:id="@+id/output"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginBottom="6dp"
+        android:textColor="@color/text"
+        android:background="@color/bg_editor"
+        android:typeface="monospace"
+        android:textSize="13sp"
+        android:gravity="right|top"
+        android:textDirection="rtl"
+        android:padding="8dp"
+        android:scrollbars="vertical"
+        android:scrollbarStyle="insideOverlay"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="6dp"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/in_field"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/term_input_hint"
+            android:textColor="@color/text"
+            android:textColorHint="@color/text_dim"
+            android:background="@color/bg_editor"
+            android:inputType="text"
+            android:singleLine="true"
+            android:imeOptions="actionDone"
+            android:padding="8dp"
+            android:textSize="14sp"/>
+
+        <Button
+            android:id="@+id/in_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="0dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:text="@string/term_send"
+            android:textSize="15sp"
+            android:textColor="@color/text"
+            android:backgroundTint="@color/surface"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end">
+
+        <Button
+            android:id="@+id/bt_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="0dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:text="@string/back"
+            android:textSize="15sp"
+            android:textColor="@color/text"
+            android:backgroundTint="@color/surface"/>
+
+        <Button
+            android:id="@+id/bt_copy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="0dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:text="@string/copy"
+            android:textSize="15sp"
+            android:textColor="@color/text"
+            android:backgroundTint="@color/surface"/>
+    </LinearLayout>
+</LinearLayout>

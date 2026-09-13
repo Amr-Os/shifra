@@ -9,6 +9,8 @@
 
 pub mod builtins;
 pub mod keywords;
+pub mod methods;
+pub mod modules;
 pub mod preprocessor;
 
 pub use preprocessor::translate;

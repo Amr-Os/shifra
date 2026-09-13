@@ -253,9 +253,9 @@ fn run_file(vm: &VirtualMachine, scope: Scope, argv0: &str) -> PyResult<()> {
     }
 }
 
-/// Shifra (`.ar`) files translate Arabic keywords to Python before compilation,
-/// then run with Arabic builtins installed. This mirrors the bootstrap runner
-/// in `examples/arabiya.rs` until native lexer support lands.
+/// Shifra (`.ar`, `.sf`, `.شفـ`) files translate Arabic keywords to Python before
+/// compilation, then run with Arabic builtins installed. This is the native run
+/// path for Shifra files.
 fn run_shifra_file(vm: &VirtualMachine, scope: Scope, path: &str) -> PyResult<()> {
     let source = match std::fs::read_to_string(path) {
         Ok(source) => source,
@@ -270,10 +270,31 @@ fn run_shifra_file(vm: &VirtualMachine, scope: Scope, path: &str) -> PyResult<()
     Ok(())
 }
 
+/// Compile a script without executing it. Shifra files are translated first, so
+/// syntax errors are reported against the original Arabic source. Used for live
+/// editor diagnostics (`rustpython --check file`).
+fn check_file(vm: &VirtualMachine, path: &str) -> PyResult<()> {
+    let source = match std::fs::read_to_string(path) {
+        Ok(source) => source,
+        Err(err) => return Err(vm.new_os_error(err.to_string())),
+    };
+    let (translated, original) = if is_shifra_file(path) {
+        (rustpython_arabiya::translate(&source), source)
+    } else {
+        (source.clone(), source)
+    };
+    let _code = vm
+        .compile(&translated, vm::compiler::Mode::Exec, path)
+        .map_err(|err| err.into_pyexception(vm, Some(&original)))?;
+    Ok(())
+}
+
 fn is_shifra_file(path: &str) -> bool {
-    std::path::Path::new(path)
-        .extension()
-        .is_some_and(|ext| ext == "ar")
+    let ext = std::path::Path::new(path).extension();
+    ext.is_some_and(|ext| {
+        let ext = ext.to_string_lossy();
+        ext == "ar" || ext == "sf" || ext == "شف" || ext == "شفـ"
+    })
 }
 
 fn get_importer(path: &str, vm: &VirtualMachine) -> PyResult<Option<PyObjectRef>> {
@@ -338,7 +359,7 @@ fn run_rustpython(vm: &VirtualMachine, run_mode: RunMode) -> PyResult<()> {
             RunMode::Module(_) => env::current_dir()
                 .ok()
                 .and_then(|p| p.to_str().map(|s| s.to_owned())),
-            RunMode::Script(_) | RunMode::InstallPip(_) => None, // handled by run_script
+            RunMode::Script(_) | RunMode::InstallPip(_) | RunMode::Check(_) => None, // handled by run_script
             RunMode::Repl => Some(String::new()),
         };
 
@@ -384,6 +405,10 @@ fn run_rustpython(vm: &VirtualMachine, run_mode: RunMode) -> PyResult<()> {
             // pymain_run_file_obj
             debug!("Running script {}", script_path);
             run_file(vm, scope.clone(), &script_path)
+        }
+        RunMode::Check(script_path) => {
+            debug!("Checking script {}", script_path);
+            check_file(vm, &script_path)
         }
         RunMode::Repl => Ok(()),
     };

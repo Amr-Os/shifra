@@ -1,0 +1,180 @@
+{
+  "name": "shifra-language",
+  "displayName": "Shifra",
+  "description": "RTL-friendly editor for Shifra (Arabic Python 3, .ar/.sf/.شفـ) files: syntax highlighting, live diagnostics, symbols, folding, hover documentation, and one-key running.",
+  "version": "0.3.8",
+  "publisher": "shifra-local",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Other"
+  ],
+  "main": "./extension.js",
+  "activationEvents": [
+    "onLanguage:shifra",
+    "workspaceContains:**/*.ar",
+    "workspaceContains:**/*.sf",
+    "onCommand:shifra.runFile",
+    "onCommand:shifra.checkSyntax",
+    "onCommand:shifra.formatDocument",
+    "onCommand:shifra.openRtlEditor",
+    "onCustomEditor:shifra.rtlEditor"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "shifra",
+        "aliases": [
+          "Shifra",
+          "العربية البرمجية"
+        ],
+        "extensions": [
+          ".ar",
+          ".sf",
+          ".شفـ"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "shifra",
+        "scopeName": "source.shifra",
+        "path": "./syntaxes/shifra.tmLanguage.json"
+      }
+    ],
+    "customEditors": [
+      {
+        "viewType": "shifra.rtlEditor",
+        "displayName": "Shifra RTL Editor",
+        "selector": [
+          {
+            "filenamePattern": "*.ar"
+          },
+          {
+            "filenamePattern": "*.sf"
+          },
+          {
+            "filenamePattern": "*.شفـ"
+          }
+        ],
+        "priority": "default"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "shifra",
+        "path": "./snippets/shifra.code-snippets"
+      }
+    ],
+    "commands": [
+      {
+        "command": "shifra.runFile",
+        "title": "Shifra: Run File",
+        "category": "Shifra"
+      },
+      {
+        "command": "shifra.checkSyntax",
+        "title": "Shifra: Check Syntax",
+        "category": "Shifra"
+      },
+      {
+        "command": "shifra.formatDocument",
+        "title": "Shifra: Format Document",
+        "category": "Shifra"
+      },
+      {
+        "command": "shifra.openRtlEditor",
+        "title": "Shifra: Open RTL Editor",
+        "category": "Shifra"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "shifra.runFile",
+        "key": "f5",
+        "when": "editorLangId == shifra && editorTextFocus && !inDebugMode"
+      },
+      {
+        "command": "shifra.checkSyntax",
+        "key": "ctrl+shift+c",
+        "when": "editorLangId == shifra && editorTextFocus"
+      },
+      {
+        "command": "shifra.formatDocument",
+        "key": "ctrl+shift+i",
+        "when": "editorLangId == shifra && editorTextFocus"
+      }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "command": "shifra.runFile",
+          "when": "resourceLangId == shifra",
+          "group": "navigation"
+        }
+      ],
+      "editor/title/run": [
+        {
+          "command": "shifra.runFile",
+          "when": "resourceLangId == shifra",
+          "group": "navigation@10"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Shifra",
+      "properties": {
+        "shifra.runtime.command": {
+          "type": "string",
+          "default": "/home/amr/Desktop/codes/Arabic/RustPython/target/release/rustpython",
+          "markdownDescription": "Command used to run `.ar/.sf/.شفـ` files. When empty, the extension searches for a Shifra/RustPython checkout (the `shifra.runtime.projectDir` setting, `SHIFRA_DIR`, `RUSTPYTHON_DIR`, an open workspace, or the extension's own folder when developing) and uses its built `rustpython` binary — preferring `target/release/rustpython` for speed, falling back to `target/debug/rustpython`, then `cargo run --release --manifest-path`."
+        },
+        "shifra.runtime.projectDir": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Path to the Shifra checkout (must contain a workspace `Cargo.toml`). Leave empty for automatic detection."
+        },
+        "shifra.runtime.terminalName": {
+          "type": "string",
+          "default": "Shifra",
+          "description": "Name of the integrated terminal used to run `.ar/.sf/.شفـ` files."
+        },
+        "shifra.runtime.captureErrors": {
+          "type": "boolean",
+          "default": false,
+          "description": "Capture the script's stderr (via process substitution) to highlight the failing line in the editor. Set to false on non-bash shells."
+        },
+        "shifra.rtlEditor.fontFamily": {
+          "type": "string",
+          "default": "JetBrains Mono, Thmanyah Sans Term, monospace",
+          "description": "Font family used by the Shifra RTL editor. Must be a monospace family so Arabic stays grid-aligned; pair with the shipped Thmanyah Sans Term (editors/fonts) for correct joined glyphs."
+        },
+        "shifra.rtlEditor.fontSize": {
+          "type": "number",
+          "default": 16,
+          "minimum": 8,
+          "maximum": 48,
+          "description": "Font size used by the Shifra RTL editor."
+        },
+        "shifra.rtlEditor.tabSize": {
+          "type": "number",
+          "default": 4,
+          "minimum": 1,
+          "maximum": 16,
+          "description": "Visual width of indentation tabs in the Shifra RTL editor."
+        },
+        "shifra.rtlEditor.lineSpacing": {
+          "type": "number",
+          "default": 1.5,
+          "minimum": 1.0,
+          "maximum": 2.5,
+          "description": "Line height multiplier in the Shifra RTL editor. Controls line, caret, and line-number height together."
+        }
+      }
+    }
+  }
+}

@@ -32,3 +32,8 @@ Lib/test/data/*
 cpython/
 .claude/
 docs/superpowers/
+
+# by me
+/editors
+/android/build
+/android/dist

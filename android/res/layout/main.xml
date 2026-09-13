@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg"
+    android:layoutDirection="rtl">
+
+    <LinearLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="6dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/app_title"
+                android:textColor="@color/text"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp"/>
+
+            <ImageButton
+                android:id="@+id/tb_undo"
+                android:layout_width="40dp"
+                android:layout_height="34dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:padding="6dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:src="@drawable/icon_undo"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/undo"/>
+
+            <ImageButton
+                android:id="@+id/tb_redo"
+                android:layout_width="40dp"
+                android:layout_height="34dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:padding="6dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:src="@drawable/icon_redo"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/redo"/>
+
+            <ImageButton
+                android:id="@+id/tb_find"
+                android:layout_width="40dp"
+                android:layout_height="34dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:padding="6dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:src="@drawable/icon_find"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/find"/>
+
+            <Button
+                android:id="@+id/tb_menu"
+                android:layout_width="40dp"
+                android:layout_height="34dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:padding="0dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:text="⋮"
+                android:textSize="20sp"
+                android:textColor="@color/text"
+                android:backgroundTint="@color/surface"
+                android:contentDescription="@string/menu"/>
+        </LinearLayout>
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:id="@+id/tabs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="2dp"/>
+        </HorizontalScrollView>
+
+        <LinearLayout
+            android:id="@+id/find_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/bg_raised"
+            android:padding="6dp"
+            android:layout_marginBottom="6dp"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/find_field"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="@string/find_hint"
+                    android:textColor="@color/text"
+                    android:textColorHint="@color/text_dim"
+                    android:backgroundTint="@color/surface"
+                    android:inputType="textNoSuggestions"
+                    android:imeOptions="actionSearch"
+                    android:singleLine="true"/>
+
+                <Button
+                    android:id="@+id/find_prev"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="0dp"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp"
+                    android:text="▲"
+                    android:textColor="@color/text"
+                    android:backgroundTint="@color/surface"
+                    android:contentDescription="@string/find_prev"/>
+
+                <Button
+                    android:id="@+id/find_next"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="0dp"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp"
+                    android:text="▼"
+                    android:textColor="@color/text"
+                    android:backgroundTint="@color/surface"
+                    android:contentDescription="@string/find_next"/>
+
+                <Button
+                    android:id="@+id/find_close"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="0dp"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp"
+                    android:text="✕"
+                    android:textColor="@color/text"
+                    android:backgroundTint="@color/surface"
+                    android:contentDescription="@string/cancel"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="4dp">
+
+                <EditText
+                    android:id="@+id/replace_field"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="@string/replace_hint"
+                    android:textColor="@color/text"
+                    android:textColorHint="@color/text_dim"
+                    android:backgroundTint="@color/surface"
+                    android:inputType="textNoSuggestions"
+                    android:singleLine="true"/>
+
+                <Button
+                    android:id="@+id/replace_one"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="0dp"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp"
+                    android:text="@string/replace_one"
+                    android:textSize="12sp"
+                    android:textColor="@color/text_on_accent"
+                    android:backgroundTint="@color/accent"/>
+
+                <Button
+                    android:id="@+id/replace_all"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="0dp"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp"
+                    android:text="@string/replace_all"
+                    android:textSize="12sp"
+                    android:textColor="@color/text_on_accent"
+                    android:backgroundTint="@color/accent"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/split"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <FrameLayout
+                android:id="@+id/code_wrap"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3">
+
+                <com.shifra.language.KodeEditor
+                    android:id="@+id/code"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textColor="@color/editor_default"
+                    android:background="@color/bg"
+                    android:backgroundTint="@color/bg"
+                    android:textSize="15sp"
+                    android:gravity="right|top"
+                    android:textDirection="rtl"
+                    android:inputType="textMultiLine|textNoSuggestions"
+                    android:scrollHorizontally="true"
+                    android:padding="10dp"
+                    android:scrollbars="vertical|horizontal"
+                    android:scrollbarStyle="insideOverlay"
+                    android:importantForAutofill="no"
+                    android:imeOptions="flagNoExtractUi|flagNoFullscreen"/>
+
+                <ImageButton
+                    android:id="@+id/fab_run"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="bottom|end"
+                    android:layout_margin="16dp"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    android:background="@drawable/fab_bg"
+                    android:src="@drawable/play_icon"
+                    android:scaleType="centerInside"
+                    android:contentDescription="@string/run_hint"
+                    android:elevation="8dp"/>
+            </FrameLayout>
+
+            <View
+                android:id="@+id/split_divider"
+                android:layout_width="6dp"
+                android:layout_height="match_parent"
+                android:background="@color/divider"
+                android:visibility="gone"/>
+
+            <LinearLayout
+                android:id="@+id/term_pane"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:orientation="vertical"
+                android:background="@color/bg_editor"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/term_out"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:textSize="12sp"
+                    android:textColor="@color/text"
+                    android:typeface="monospace"
+                    android:gravity="top|right"
+                    android:textDirection="rtl"
+                    android:scrollbars="vertical"
+                    android:scrollbarStyle="insideOverlay"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/term_in"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="@string/term_input_hint"
+                        android:textColor="@color/text"
+                        android:textColorHint="@color/text_dim"
+                        android:backgroundTint="@color/surface"
+                        android:typeface="monospace"
+                        android:inputType="textNoSuggestions"
+                        android:imeOptions="actionSend"/>
+
+                    <Button
+                        android:id="@+id/term_send"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/term_send"
+                        android:textColor="@color/text_on_accent"
+                        android:backgroundTint="@color/accent"/>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="84dp"
+            android:paddingTop="2dp"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:id="@+id/snippet_strip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"/>
+        </HorizontalScrollView>
+    </LinearLayout>
+</FrameLayout>

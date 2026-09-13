@@ -1,0 +1,9 @@
+استورد atexit
+استورد sys
+
+
+عرف myexit():
+    sys.exit(2)
+
+
+atexit.register(myexit)

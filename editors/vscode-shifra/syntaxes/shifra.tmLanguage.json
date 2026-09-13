@@ -1,0 +1,65 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Shifra",
+  "scopeName": "source.shifra",
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#strings" },
+    { "include": "#calls" },
+    { "include": "#keywords" },
+    { "include": "#builtins" },
+    { "include": "#numbers" }
+  ],
+  "repository": {
+    "calls": {
+      "patterns": [
+        {
+          "name": "support.function.shifra",
+          "match": "(?<![\\p{L}\\p{N}_])([\\p{L}][\\p{L}\\p{N}_]*)(?=\\s*\\()"
+        }
+      ]
+    },
+    "comments": {
+      "patterns": [{ "name": "comment.line.number-sign.shifra", "match": "#.*$" }]
+    },
+    "strings": {
+      "patterns": [
+        { "name": "string.quoted.double.multiline.shifra", "begin": "مـ\"\"\"", "end": "\"\"\"", "patterns": [{ "name": "constant.character.escape.shifra", "match": "\\\\." }] },
+        { "name": "string.quoted.single.multiline.shifra", "begin": "مـ'''", "end": "'''", "patterns": [{ "name": "constant.character.escape.shifra", "match": "\\\\." }] },
+        { "name": "string.quoted.double.multiline.shifra", "begin": "(?:[rRfFuU]|[fF][rR]?|[rR][bB]|[bB][rR]?)\"\"\"", "end": "\"\"\"", "patterns": [{ "name": "constant.character.escape.shifra", "match": "\\\\." }] },
+        { "name": "string.quoted.single.multiline.shifra", "begin": "(?:[rRfFuU]|[fF][rR]?|[rR][bB]|[bB][rR]?)'''", "end": "'''", "patterns": [{ "name": "constant.character.escape.shifra", "match": "\\\\." }] },
+        { "name": "string.quoted.double.multiline.shifra", "begin": "\"\"\"", "end": "\"\"\"", "patterns": [{ "name": "constant.character.escape.shifra", "match": "\\\\." }] },
+        { "name": "string.quoted.single.multiline.shifra", "begin": "'''", "end": "'''", "patterns": [{ "name": "constant.character.escape.shifra", "match": "\\\\." }] },
+        { "name": "string.quoted.double.shifra", "begin": "مـ\"", "end": "\"", "patterns": [{ "name": "constant.character.escape.shifra", "match": "\\\\." }] },
+        { "name": "string.quoted.single.shifra", "begin": "مـ'", "end": "'", "patterns": [{ "name": "constant.character.escape.shifra", "match": "\\\\." }] },
+        { "name": "string.quoted.double.shifra", "begin": "(?:[rRfFuU]|[fF][rR]?|[rR][bB]|[bB][rR]?)\"", "end": "\"", "patterns": [{ "name": "constant.character.escape.shifra", "match": "\\\\." }] },
+        { "name": "string.quoted.single.shifra", "begin": "(?:[rRfFuU]|[fF][rR]?|[rR][bB]|[bB][rR]?)'", "end": "'", "patterns": [{ "name": "constant.character.escape.shifra", "match": "\\\\." }] },
+        { "name": "string.quoted.double.shifra", "begin": "\"", "end": "\"", "patterns": [{ "name": "constant.character.escape.shifra", "match": "\\\\." }] },
+        { "name": "string.quoted.single.shifra", "begin": "'", "end": "'", "patterns": [{ "name": "constant.character.escape.shifra", "match": "\\\\." }] }
+      ]
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.shifra",
+          "match": "(?<![\\p{L}\\p{N}_])(إذا|وإذا|وإلا|طالما|لكل|ضمن|عرف|أعد|صنف|استورد|من|جرب|التقط|ختاما|توقف|استمر|تجاوز|ارم|مع|باسم|ليس|و|أو|هو|احذف|تحقق|عام|لامحلي|لامبدا|لازمني|انتظر|انتج|طابق|حالة|نوع|__الاسم__|__الكل__|الاسم__|الكل__|معطيات_الصنف|معطيات_الصنوف|أي_نوع|تصنيف)(?![\\p{L}\\p{N}_])"
+        },
+        {
+          "name": "constant.language.shifra",
+          "match": "(?<![\\p{L}\\p{N}_])(صحيح|خاطئ|عدم)(?![\\p{L}\\p{N}_])"
+        }
+      ]
+    },
+    "builtins": {
+      "patterns": [
+        {
+          "name": "support.function.builtin.shifra",
+          "match": "(?<![\\p{L}\\p{N}_])(اطبع|طول|نطاق|قائمة|قاموس|مجموع|اصغر|اكبر|عدد|نص|خطأ_قيمة|خطأ_مفتاح)(?![\\p{L}\\p{N}_])"
+        }
+      ]
+    },
+    "numbers": {
+      "patterns": [{ "name": "constant.numeric.shifra", "match": "(?<![\\p{L}\\p{N}_])[0-9٠-٩۰-۹]+(?:\\.[0-9٠-٩۰-۹]+)?(?![\\p{L}\\p{N}_])" }]
+    }
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "Conditional": {
+    "prefix": "إذا",
+    "body": ["إذا ${1:شرط}:", "    ${0}"],
+    "description": "Arabic conditional — if"
+  },
+  "Elif": {
+    "prefix": "وإذا",
+    "body": ["وإذا ${1:شرط}:", "    ${0}"],
+    "description": "else if"
+  },
+  "Else": {
+    "prefix": "وإلا",
+    "body": ["وإلا:", "    ${0}"],
+    "description": "else"
+  },
+  "Ternary": {
+    "prefix": "إذاوإلا",
+    "body": ["${1:نتيجة_نعم} إذا ${2:شرط} وإلا ${3:نتيجة_لا}"],
+    "description": "conditional expression (ternary)"
+  },
+  "Function": {
+    "prefix": "عرف",
+    "body": ["عرف ${1:اسم}(${2:وسائط}):", "    ${0}"],
+    "description": "Arabic function — def"
+  },
+  "Return": {
+    "prefix": "أعد",
+    "body": ["أعد ${1:قيمة}"],
+    "description": "return a value"
+  },
+  "Class": {
+    "prefix": "صنف",
+    "body": ["صنف ${1:اسم}${2:(${3:أصل})}:", "    ${0}"],
+    "description": "Arabic class — class"
+  },
+  "Lambda": {
+    "prefix": "لامبدا",
+    "body": ["لامبدا ${1:وسائط}: ${2:تعبير}"],
+    "description": "Arabic lambda — anonymous function"
+  },
+  "For loop": {
+    "prefix": "لكل",
+    "body": ["لكل ${1:عنصر} ضمن ${2:نطاق}:", "    ${0}"],
+    "description": "Arabic for loop"
+  },
+  "While loop": {
+    "prefix": "طالما",
+    "body": ["طالما ${1:شرط}:", "    ${0}"],
+    "description": "Arabic while loop"
+  },
+  "Import module": {
+    "prefix": "استورد",
+    "body": ["استورد ${1:وحدة}"],
+    "description": "import a module"
+  },
+  "From import": {
+    "prefix": "مناستورد",
+    "body": ["من ${1:وحدة} استورد ${2:اسم}"],
+    "description": "from ... import ..."
+  },
+  "Match": {
+    "prefix": "طابق",
+    "body": ["طابق ${1:قيمة}:", "    حالة ${2:نمط}:", "        ${0}"],
+    "description": "Arabic match — pattern matching"
+  },
+  "Case": {
+    "prefix": "حالة",
+    "body": ["حالة ${1:نمط}:", "    ${0}"],
+    "description": "case branch (inside طابق)"
+  },
+  "With": {
+    "prefix": "مع",
+    "body": ["مع ${1:مصدر} باسم ${2:اسم}:", "    ${0}"],
+    "description": "Arabic with — context manager"
+  },
+  "Try/except": {
+    "prefix": "جرب",
+    "body": ["جرب:", "    ${1}", "التقط ${2:خطأ_قيمة} باسم ${3:خطأ}:", "    ${0}"],
+    "description": "Arabic exception handling"
+  },
+  "Finally": {
+    "prefix": "ختاما",
+    "body": ["ختاما:", "    ${0}"],
+    "description": "Arabic finally — cleanup block"
+  },
+  "Raise": {
+    "prefix": "ارم",
+    "body": ["ارم ${1:خطأ_قيمة}(${2:رسالة})"],
+    "description": "raise an exception"
+  },
+  "Print": {
+    "prefix": "اطبع",
+    "body": ["اطبع(${1:قيمة})"],
+    "description": "print to stdout"
+  },
+  "Length": {
+    "prefix": "طول",
+    "body": ["طول(${1:قيمة})"],
+    "description": "len() — number of items"
+  },
+  "Range": {
+    "prefix": "نطاق",
+    "body": ["نطاق(${1:بداية}, ${2:نهاية}, ${3:خطوة})"],
+    "description": "range() — numeric sequence"
+  }
+}

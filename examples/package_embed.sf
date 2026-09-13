@@ -1,0 +1,24 @@
+من dataclasses استورد dataclass
+من typing استورد Any
+
+__all__ = ["context"]
+
+
+@dataclass
+صنف Context:
+    name: نص
+    something: Any
+
+
+_context = Context(
+    name="test name",
+    something=عدم,
+)
+
+
+عرف context() -> Context:
+    أعد _context
+
+
+إذا __name__ == "__main__":
+    اطبع(context().name)

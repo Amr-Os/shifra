@@ -1,0 +1,17 @@
+من rust_py_module استورد RustStruct, rust_function
+
+
+صنف PythonPerson:
+    عرف __التهيئة__(الذات, name):
+        الذات.name = name
+
+
+عرف python_callback():
+    python_person = PythonPerson("Peter Python")
+    rust_object = rust_function(42, "This is a python string", python_person)
+    اطبع("Printing member 'numbers' from rust struct: ", rust_object.numbers)
+    rust_object.print_in_rust_from_python()
+
+
+عرف take_string(string):
+    اطبع("Calling python function from rust with string: " + string)

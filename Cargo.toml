@@ -77,6 +77,10 @@ name = "rustpython"
 path = "src/main.rs"
 
 [[example]]
+name = "arabiya_runner"
+path = "examples/to_be_deleted/arabiya.rs"
+
+[[example]]
 name = "custom_tls_providers"
 path = "examples/custom_tls_providers.rs"
 required-features = [
@@ -115,7 +119,9 @@ codegen-units = 1
 opt-level = 3
 
 [profile.release]
-lto = "thin"
+lto = "fat"
+codegen-units = 1
+strip = true
 
 [profile.wasm-release]
 inherits = "release"

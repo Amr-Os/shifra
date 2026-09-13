@@ -1,0 +1,33 @@
+{
+  "comments": {
+    "lineComment": "#"
+  },
+  "brackets": [["{", "}"], ["[", "]"], ["(", ")"]],
+  "autoClosingPairs": [
+    { "open": "{", "close": "}" },
+    { "open": "[", "close": "]" },
+    { "open": "(", "close": ")" },
+    { "open": "\"", "close": "\"", "notIn": ["string", "comment"] },
+    { "open": "'", "close": "'", "notIn": ["string", "comment"] }
+  ],
+  "surroundingPairs": [["{", "}"], ["[", "]"], ["(", ")"], ["\"", "\""], ["'", "'"]],
+  "wordPattern": "(-?\\d*\\.?\\d+)|([\\p{L}_][\\p{L}\\p{N}_]*)|([\\p{Arabic}_][\\p{Arabic}\\p{N}_]*)",
+  "onEnterRules": [
+    {
+      "beforeText": "^\\s*(?:لازمني\\s+)?عرف\\b.*:\\s*(?:#.*)?$",
+      "action": { "indent": "indent" }
+    },
+    {
+      "beforeText": "^\\s*(?:صنف\\b|إذا\\b|وإذا\\b|وإلا\\b|لكل\\b|طالما\\b|جرب\\b|التقط\\b|ختاما\\b|مع\\b|طابق\\b|حالة\\b).*:\\s*(?:#.*)?$",
+      "action": { "indent": "indent" }
+    },
+    {
+      "beforeText": "^\\s*(?:أعد|ارم|تجاوز|توقف|استمر|انتاج)\\b",
+      "action": { "indent": "none" }
+    }
+  ],
+  "indentationRules": {
+    "increaseIndentPattern": "^\\s*(?!#).*:\\s*(?:#.*)?$",
+    "decreaseIndentPattern": "^\\s*(?:وإلا(?:_إن)?|التقط|ختاما|حالة)(?:\\s|:|$).*"
+  }
+}

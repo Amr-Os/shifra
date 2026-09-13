@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- VS Code "Dark Modern" palette -->
+    <color name="bg">#1F1F1F</color>
+    <color name="bg_raised">#252526</color>
+    <color name="bg_panel">#181818</color>
+    <color name="bg_editor">#1F1F1F</color>
+    <color name="accent">#007ACC</color>
+    <color name="accent_dark">#0E639C</color>
+    <color name="accent_dim">#37373D</color>
+    <color name="surface">#3C3C3C</color>
+    <color name="divider">#3C3C3C</color>
+
+    <color name="text">#CCCCCC</color>
+    <color name="text_dim">#9D9D9D</color>
+    <color name="text_on_accent">#FFFFFF</color>
+
+    <!-- Editor syntax colors (VS Code Dark+ theme) -->
+    <color name="editor_default">#D4D4D4</color>
+    <color name="editor_comment">#6A9955</color>
+    <color name="editor_string">#CE9178</color>
+    <color name="editor_keyword">#569CD6</color>
+    <color name="editor_builtin">#DCDCAA</color>
+    <color name="editor_variable">#9CDCFE</color>
+    <color name="editor_number">#B5CEA8</color>
+    <color name="editor_gutter">#858585</color>
+    <color name="editor_line_highlight">#2A2A2A</color>
+    <color name="editor_bracket_match">#264F78</color>
+</resources>
