@@ -1,12 +1,13 @@
-# Contributing to RustPython
+# Contributing to Shifra
 
-Contributions are more than welcome, and in many cases we are happy to guide
-contributors through PRs or on [**Discord**](https://discord.gg/vru8NypEhv).
+Shifra is a fork of [RustPython](https://github.com/RustPython/RustPython).
+These guidelines inherit from the upstream project; interpreter work should be
+filed here in `Amr-Os/shifra`, while upstream-specific issues
+([`good first issue`](https://github.com/RustPython/RustPython/issues?q=label%3A%22good+first+issue%22+is%3Aissue+is%3Aopen+),
+[issue tracker](https://github.com/RustPython/RustPython/issues)) are tracked
+there.
 
 ## Finding ways to help
-
-We label issues that would be good for a first time contributor as [`good first issue`](https://github.com/RustPython/RustPython/issues?q=label%3A%22good+first+issue%22+is%3Aissue+is%3Aopen+).
-Also checkout the [issue tracker](https://github.com/RustPython/RustPython/issues) for all open issues. 
 
 You can enhance CPython compatibility by increasing our unittest coverage, you can see [This pinned issue](https://github.com/RustPython/RustPython/issues/6839) to see which libs and tests need be updated to our current supported python version.
 
@@ -22,12 +23,12 @@ We **require all use of AI in contributions to follow our
 
 If your contribution does not follow the policy, it will be closed.
 
-## RustPython Development Guide and Tips
+## Shifra Development Guide and Tips
 
-RustPython attracts developers with interest and experience in Rust, Python,
+Shifra attracts developers with interest and experience in Rust, Python,
 or WebAssembly. Whether you are familiar with Rust, Python, or 
 WebAssembly, the goal of this Development Guide is to give you the basics to
-get set up for developing RustPython and contributing to this project. 
+get set up for developing Shifra and contributing to this project. 
 
 The contents of the Development Guide include:
 
@@ -41,7 +42,7 @@ The contents of the Development Guide include:
 
 ## Setting up a development environment
 
-RustPython requires the following:
+Shifra requires the following:
 
 - Rust latest stable version (e.g 1.92.0 as of Jan 7 2026)
     - To check Rust version: `rustc --version` 
@@ -78,7 +79,7 @@ a code spell checker, is used in order to ensure correct spellings for code.
 
 ## Testing
 
-To test RustPython's functionality, a collection of Python snippets is located
+To test the Shifra interpreter's functionality, a collection of Python snippets is located
 in the `extra_tests/snippets` directory and can be run using `pytest`:
 
 ```shell
@@ -100,7 +101,7 @@ $ cd crates/capi
 $ cargo test
 ```
 
-Python unit tests can be run by compiling RustPython and running the test module:
+Python unit tests can be run by compiling Shifra and running the test module:
 
 ```shell
 $ cargo run --release -- -m test
@@ -194,18 +195,19 @@ repository's structure:
 - `crates/vm/src`: python virtual machine
   - `builtins`: Builtin functions and types
   - `stdlib`: Standard library parts implemented in rust.
-- `src`: using the other subcrates to bring rustpython to life.
+- `src`: using the other subcrates to bring shifra to life.
 - `crates/wasm`: Binary crate and resources for WebAssembly build
 - `extra_tests`: extra integration test snippets as a supplement to `Lib/test`.
   Add new RustPython-only regression tests here; do not place new tests under `Lib/test`.
 
 ## Understanding Internals
 
-The RustPython workspace includes the `rustpython` top-level crate. The `Cargo.toml`
-file in the root of the repo provide configuration of the crate and the
-implementation is found in the `src` directory (specifically, `src/lib.rs`).
+The Shifra workspace includes the `shifra` top-level crate (the executable
+binary). The `Cargo.toml` file in the root of the repo provides configuration
+of the crate and the implementation is found in the `src` directory
+(specifically, `src/lib.rs`).
 
-The top-level `rustpython` binary depends on several lower-level crates including:
+The top-level `shifra` binary depends on several lower-level crates including:
 
 - `ruff_python_parser` and `ruff_python_ast` (external dependencies from the Ruff project)
 - `rustpython-compiler` (implementation in `crates/compiler/src`)

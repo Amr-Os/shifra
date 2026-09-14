@@ -70,7 +70,7 @@ RustPython/
 ├── README.md                 # upstream-style readme + Shifra quick start
 ├── CONTRIBUTING.md, AGENTS.md
 ├── TKINTER_TURTLE_NOTE.md    # notes on RTL/shaping + rebuilding the released Tk DLL
-├── src/                      # the `rustpython` CLI binary
+├── src/                      # the `shifra` CLI binary
 │   ├── main.rs               # thin entry → InterpreterBuilder + run()
 │   ├── settings.rs           # args; incl. --check (compile-only), file detection
 │   └── lib.rs                # is_shifra_file(), translation before compile
@@ -103,8 +103,8 @@ RustPython/
 
 ## 4. The interpreter core (fork of RustPython)
 
-- **Workspace crates** (all version `0.5.0`, edition 2024): the main `rustpython`
-  binary crate plus `rustpython-vm`, `rustpython-compiler`, `rustpython-parser`,
+- **Workspace crates** (all version `0.5.0`, edition 2024): the main `shifra`
+  binary crate (renamed from upstream `rustpython`) plus `rustpython-vm`, `rustpython-compiler`, `rustpython-parser`,
   `rustpython-derive`, `rustpython-stdlib`, `rustpython-pylib`, `rustpython-wasm`,
   `rustpython-capi`, and the new `rustpython-arabiya` (v0.1.0).
 - **Key features** wired into the binary crate:
@@ -113,11 +113,11 @@ RustPython/
   - `tkinter` — enables Tcl/Tk GUI bindings (used on desktop with the bundled RTL
     `tk.pc`; see `TKINTER_TURTLE_NOTE.md`)
   - `ssl-rustls-aws-lc`, `jit`, `sqlite`, `capi`, `flame-it` — optional.
-- **CLI entry points** (relevant to Shifra):
-  - `rustpython script.sf` — detect Shifra by extension, translate, run.
-  - `rustpython --check file.sf` — compile (translate) without executing — used by
+- **CLI entry points** (relevant to Shifra; the binary is named `shifra`):
+  - `shifra script.sf` — detect Shifra by extension, translate, run.
+  - `shifra --check file.sf` — compile (translate) without executing — used by
     the VS Code/nvim diagnostics features.
-  - `rustpython` (no args) — REPL; note: stdin is **not** translated, so piping a
+  - `shifra` (no args) — REPL; note: stdin is **not** translated, so piping a
     `.sf` file via stdin fails with `NameError`; you must pass the file path as an
     argument.
 
@@ -322,8 +322,10 @@ A lightweight Lua plugin (10 files):
    the standard library, so the app has **no Python files** inside.
    (`RUST_BUILD=1` re-runs this step; otherwise the last built binaries are reused.)
 2. `aapt2 compile` all `res/*` → resources zip; `aapt2 link` against platform
-   **android-35** with the manifest (package `com.shifra.language`, versionCode 2,
-   versionName from `$VER`, minSdk 24, targetSdk 34, **no permissions requested**,
+**android-35** with the manifest (package `com.shifra.language`, versionCode 2,
+    versionName from `$VER`, minSdk 24 (**Android 7.0** — the native libs are also
+    linked at API 24, so the app runs on Android 7.0 through 15+), targetSdk 34
+    (kept at 34 so Android 15's edge-to-edge enforcement doesn't kick in), **no permissions requested**,
    `extractNativeLibs="true"`, `supportsRtl="true"`, `debuggable="true"`).
 3. `javac` the four Java sources (with generated `R.java`) → `.class`, then **d8**
    → `classes.dex`.
@@ -403,7 +405,7 @@ adb shell "run-as com.shifra.language '$BASEDIR/lib/arm64/libshifra.so' /data/lo
 
 ### Desktop (host, Linux, with tkinter)
 ```bash
-cargo build --release --features tkinter --bin rustpython \
+cargo build --release --features tkinter --bin shifra \
   PKG_CONFIG_PATH=/home/amr/.shifra-tk/lib/pkgconfig   # Tcl/Tk RTL build
 cargo run --release -- android/assets/demo.sf
 ```
@@ -411,10 +413,16 @@ cargo run --release -- android/assets/demo.sf
 ### Android cross-compile (needs NDK 28.2.13676358 + static libffi builds)
 ```bash
 # per-architecture Cargo invocations (separate so each cache is valid):
-#   aarch64: CC/AR/CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER = aarch64-linux-android35-clang / llvm-ar
+#   aarch64: CC/AR/CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER = aarch64-linux-android24-clang / llvm-ar
 #            RUSTFLAGS="-C link-arg=-L/tmp/opencode/ffi-aarch64/lib"
-#   x86_64:  CC/AR/CARGO_TARGET_X86_64_LINUX_ANDROID_LINKER = x86_64-linux-android35-clang / llvm-ar
+#   x86_64:  CC/AR/CARGO_TARGET_X86_64_LINUX_ANDROID_LINKER = x86_64-linux-android24-clang / llvm-ar
 #            RUSTFLAGS="-C link-arg=-L/tmp/opencode/ffi-x86_64/lib"
+# The android24 triplets set `.note.android.ident` SDK=24 (Android 7.0 floor,
+# matching the manifest minSdk); do not use android35 triplets — that would let
+# the binary reference bionic symbols missing on Android 7-9.
+# The static libffi builds in /tmp/opencode/ffi-<arch>/lib must be made with the
+# same android24 clang (CC=<triple>24-clang ./configure --host=<triple> --with-pic
+# --disable-shared --disable-docs --prefix=/tmp/opencode/ffi-<arch>).
 VER=0.3.8 ./android/build.sh    # RUST_BUILD stays unset → reuse binaries
 adb install -r android/dist/shifra-0.3.8.apk
 ```
@@ -452,8 +460,9 @@ fonts installed as your terminal's monospace Arabic font.
   app; only two ABIs (arm64 + x86_64) and one frozen stdlib.
 - **Legacy naming:** the extension/plugin still accept the old `.ar` extension for
   compatibility; new canonical extensions are `.sf` and `.شفـ`.
-- **Distribution snapshots:** `Shifra-for-friends.zip` on repo root is a *stale*
-  pre-rebrand snapshot (Sep 8) and currently out of sync with this tree.
+- **Distribution snapshots:** previously a `Shifra-for-friends.zip` sat on the
+  repo root as a *stale* pre-rebrand snapshot (Sep 8); it was removed in favor of
+  git-tagged releases and the editable checkout.
 
 ---
 
