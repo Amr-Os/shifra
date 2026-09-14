@@ -1,275 +1,157 @@
-<img src="./logo.png" width="125" height="125" align="right" />
+<img src="./logo.png" width="125" height="125" align="left" />
 
-# [RustPython](https://rustpython.github.io/)
+# شِفرة · Shifra
 
-A Python-3 (CPython >= 3.14.0) Interpreter written in Rust :snake: :scream:
-:metal:.
+**لغة برمجة عربية كاملة مبنية على بايثون ٣** — مترجم بايثون ٣٫١٤ مكتوب بلغة
+Rust يقرأ أكوادًا عربية (`عرف` = `def`، `إذا` = `if`، `اطبع` = `print`…) ويحوّلها
+إلى بايثون قبل التنفيذ، فتعمل كل دلالات Python 3.14 دون تغيير.
 
-[![Build Status](https://github.com/RustPython/RustPython/workflows/CI/badge.svg)](https://github.com/RustPython/RustPython/actions?query=workflow%3ACI)
-[![codecov](https://codecov.io/gh/RustPython/RustPython/branch/main/graph/badge.svg)](https://codecov.io/gh/RustPython/RustPython)
-[![CodSpeed](https://img.shields.io/endpoint?url=https://codspeed.io/badge.json)](https://app.codspeed.io/RustPython/RustPython?utm_source=badge)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
-[![Contributors](https://img.shields.io/github/contributors/RustPython/RustPython.svg)](https://github.com/RustPython/RustPython/graphs/contributors)
-[![Discord Shield](https://discordapp.com/api/guilds/1043121930691149845/widget.png?style=shield)][discord]
-[![docs.rs](https://docs.rs/rustpython/badge.svg)](https://docs.rs/rustpython/)
-[![Crates.io](https://img.shields.io/crates/v/rustpython)](https://crates.io/crates/rustpython)
-[![dependency status](https://deps.rs/crate/rustpython/0.1.1/status.svg)](https://deps.rs/crate/rustpython/0.1.1)
-[![Open in Gitpod](https://img.shields.io/static/v1?label=Open%20in&message=Gitpod&color=1aa6e4&logo=gitpod)](https://gitpod.io#https://github.com/RustPython/RustPython)
+البرنامج التالي بلغة شِفرة:
 
-## Usage
+```shifra
+عرف أكبر(أ, ب):
+    إذا أ > ب:
+        أعد أ
+    وإلا:
+        أعد ب
 
-**Check out our [online demo](https://rustpython.github.io/demo/) running on WebAssembly.**
+طابع = "موجب" إذا ن >= ٠ وإلا "سالب"
+```
 
-RustPython requires Rust latest stable version (e.g 1.67.1 at February 7th 2023). If you don't
-currently have Rust installed on your system you can do so by following the instructions at [rustup.rs](https://rustup.rs/).
+---
 
-To check the version of Rust you're currently running, use `rustc --version`. If you wish to update,
-`rustup update stable` will update your Rust installation to the most recent stable release.
+## يتضمّن المشروع
 
-To build RustPython locally, first, clone the source code:
+| الجزء | الموقع | ما هو |
+| --- | --- | --- |
+| المترجم | `crates/` + `src/` | مترجم Python 3.14 مكتوب بـ Rust يقبل ملفات شِفرة (`.sf`، `.ar`، `.شفـ`) |
+| طبقة اللغة | `crates/arabiya/` | قاموس المترجم الذي يحوّل النص العربي إلى نصّ بايثون |
+| مواصفة اللغة | `SHIFRA.md` | المعجم العربي ↔ بايثون (المصدر المرجعي) |
+| محرّر VS Code | `editors/vscode-shifra/` | إضافة تتضمّن تلوين الصياغة ومحرّرًا عربيًا RTL وتشخيصًا حيًا وتشغيل الملفات |
+| محرّر Neovim | `editors/nvim-shifra/` | إضافة Neovim مع عرض RTL وصياغة وتشخيص ومقاطع جاهزة |
+| الخطوط | `editors/fonts/` | خطّا حاسوب عربيان (Thanyah Sans Term + Shifra Naskh Term) |
+| تطبيق أندرويد | `android/` | تطبيق «شِفرة» على الهاتف بدون Gradle، يضم المترجم داخل `libshifra.so` |
+| أمثلة GUI | `example_projects/shifra_tk/` | برامج Tkinter مكتوبة بشِفرة (سلحفاة، عدّاد، نافذة ترحيب) |
+| التوثيق والعمليات | `README.md`، `CONTRIBUTING.md`، `AGENTS.md`، `scripts/` | تعليمات البناء والاختبار والعمل |
+
+---
+
+## بدء سريع
 
 ```bash
-git clone https://github.com/RustPython/RustPython
+# تشغيل ملف بامتداد .sf (أو .ar / .شفـ)
+cargo run --release -- prog.sf
+
+# تحقّق من الصياغة دون تنفيذ (تستخدمه المحرّرات للتشخيص)
+cargo run --release -- --check prog.sf
+
+# واجهة تفاعلية (REPL)
+cargo run --release
 ```
 
-RustPython uses symlinks to manage python libraries in `Lib/`. If on windows, running the following helps:
-```bash
-git config core.symlinks true
-```
+> ملاحظة: لا تتم ترجمة المدخل القياسي (stdin)؛ يجب تمرير مسار الملف كوسيط.
 
-Then you can change into the RustPython directory and run the demo (Note: `--release` is
-needed to prevent stack overflow on Windows):
+### المتطلبات
 
-```bash
-$ cd RustPython
-$ cargo run --release -- -c 'print("Hello, RustPython!")'
-Hello, RustPython!
-```
+- Rust أحدث نسخة مستقرة (الإصدار المطلوب في `rust-toolchain.toml`)
+- لمرور ملفات `.sf` يجب تمريرها كوسيط تشغيل
 
-Or use the interactive shell:
+---
 
-```bash
-$ cargo run --release
-Welcome to rustpython
->>>>> 2+2
-4
-```
-
-NOTE: For windows users, please set `RUSTPYTHONPATH` environment variable as `Lib` path in project directory.
-(e.g. When RustPython directory is `C:\RustPython`, set `RUSTPYTHONPATH` as `C:\RustPython\Lib`)
-
-You can also install and run RustPython with the following:
+## البناء والاختبار
 
 ```bash
-$ cargo install --git https://github.com/RustPython/RustPython rustpython
-$ rustpython
-Welcome to the magnificent Rust Python interpreter
->>>>>
+# اختبار طبقة اللغة (58 وحدة + 12 اختبار تكامل)
+cargo test -p rustpython-arabiya
+
+# اختبار المترجم
+cargo test --workspace --exclude rustpython_wasm --exclude rustpython-venvlauncher --exclude rustpython-capi
+(cd crates/capi && cargo test)
+
+# اختبارات بايثون
+cd extra_tests && pytest -v
+
+# الفحص بالـ linter
+cargo clippy --workspace --all-targets --exclude rustpython_wasm --exclude rustpython-venvlauncher --exclude rustpython-capi
 ```
 
-### venv
-
-Because RustPython currently doesn't provide a well-packaged installation, using venv helps to use pip easier.
-
-```sh
-$ rustpython -m venv <your_env_name>
-$ . <your_env_name>/bin/activate
-$ python # now `python` is the alias of the RustPython for the new env
-```
-
-### PIP
-
-If you'd like to make https requests, you can enable the `ssl` feature, which
-also lets you install the `pip` package manager. Note that on Windows, you may
-need to install OpenSSL, or you can enable the `ssl-openssl-vendor` feature instead,
-which compiles OpenSSL for you but requires a C compiler, perl, and `make`.
-OpenSSL version 3 is expected and tested in CI. Older versions may not work.
-
-Once you've installed rustpython with SSL support, you can install pip by
-running:
+### تطبيق أندرويد
 
 ```bash
-cargo install --git https://github.com/RustPython/RustPython
-rustpython --install-pip
+VER=0.3.8 ./android/build.sh
 ```
 
-You can also install RustPython through the `conda` package manager, though
-this isn't officially supported and may be out of date:
+### إضافة VS Code
 
 ```bash
-conda install rustpython -c conda-forge
-rustpython
+cd editors/vscode-shifra
+node_modules/.bin/vsce package -o shifra-language-0.3.8.vsix
+code --install-extension shifra-language-0.3.8.vsix
 ```
 
-### SSL provider
+---
 
-For HTTPS requests, `ssl-rustls-aws-lc` is enabled by default for the RustPython binary. Embedders can use `rustpython-stdlib`'s provider-agnostic `ssl-rustls` feature and install their own rustls crypto provider, or replace rustls with `ssl-openssl` if their environment requires OpenSSL.
-Note that to use OpenSSL on Windows, you may need to install OpenSSL, or you can enable the `ssl-openssl-vendor` feature instead,
-which compiles OpenSSL for you but requires a C compiler, perl, and `make`.
-OpenSSL version 3 is expected and tested in CI. Older versions may not work.
+## الترخيص (Licence)
 
-### WASI
+مشروع شِفرة هو فرع (fork) من
+[RustPython](https://github.com/RustPython/RustPython)، ويحافظ على الترخيصين
+الأصليين:
 
-You can compile RustPython to a standalone WebAssembly WASI module so it can run anywhere.
+- الشيفرة البرمجية مرخّصة بموجب رخصة MIT — انظر [LICENSE](LICENSE).
+- الشعار (logo) مرخّص بموجب CC-BY-4.0 — انظر [LICENSE-logo](LICENSE-logo).
+- المكتبة القياسية (مجلد `Lib/`) من CPython وتخضع لرخصة PSF — انظر
+  `Lib/PSF-LICENSE`.
 
-Build
+بإمكانك القراءة عن المساهمة في [CONTRIBUTING.md](CONTRIBUTING.md).
+
+---
+
+# English
+
+**Shifra** is a complete **Arabic programming language** built on top of a fork
+of [RustPython](https://github.com/RustPython/RustPython) — a Python **3.14.0**
+interpreter written in Rust. Shifra code uses Arabic spellings for Python's
+keywords, builtins and methods (`عرف` = `def`, `إذا` = `if`, `اطبع` = `print`,
+...). A preprocessor rewrites the Arabic source into ordinary Python before it
+reaches the RustPython compiler, so **all Python 3.14 semantics** work
+unchanged. Files use the `.sf` (canonical), `.شفـ` or `.ar` (legacy) extensions.
+
+## Quick start
 
 ```bash
-cargo build --target wasm32-wasip1 --no-default-features --features freeze-stdlib,stdlib --release
+cargo run --release -- prog.sf   # run a Shifra file
+cargo run --release -- --check prog.sf  # syntax check (used by editors)
+cargo run --release             # interactive REPL
 ```
 
-Run by wasmer
+## What's in the repo
+
+| Part | Where | What it is |
+| --- | --- | --- |
+| Interpreter | `crates/` + `src/` | Fork of RustPython wired to accept Shifra files |
+| Language layer | `crates/arabiya/` | Arabic ↔ Python translator (keywords, builtins, methods, modules) |
+| Language spec | `SHIFRA.md` | The canonical Arabic ↔ Python dictionary |
+| VS Code extension | `editors/vscode-shifra/` | Syntax highlighting, RTL custom editor, live diagnostics, running files |
+| Neovim plugin | `editors/nvim-shifra/` | RTL rendering, syntax, diagnostics, snippets |
+| Fonts | `editors/fonts/` | Two monospace Arabic terminal fonts |
+| Android app | `android/` | Gradle-free app embedding the interpreter as `libshifra.so` |
+| Tk GUI demos | `example_projects/shifra_tk/` | Tkinter programs written in Shifra (RTL-aware) |
+
+## Testing
 
 ```bash
-wasmer run --volume `pwd` -- target/wasm32-wasip1/release/rustpython.wasm `pwd`/extra_tests/snippets/stdlib_random.py
+cargo test -p rustpython-arabiya
+cargo test --workspace --exclude rustpython_wasm --exclude rustpython-venvlauncher --exclude rustpython-capi
+(cd crates/capi && cargo test)
+cd extra_tests && pytest -v
 ```
 
-Run by wapm
+## Licenses
 
-```bash
-$ wapm install rustpython
-$ wapm run rustpython
->>>>> 2+2
-4
-```
+Shifra is a fork of [RustPython](https://github.com/RustPython/RustPython) and
+keeps the original two licenses:
 
-#### Building the WASI file
-
-You can build the WebAssembly WASI file with:
-
-```bash
-cargo build --release --target wasm32-wasip1 --features="freeze-stdlib"
-```
-
-> Note: we use the `freeze-stdlib` to include the standard library inside the binary. You also have to run once `rustup target add wasm32-wasip1`.
-
-### JIT (Just in time) compiler
-
-RustPython has a **very** experimental JIT compiler that compile python functions into native code.
-
-#### Building
-
-By default the JIT compiler isn't enabled, it's enabled with the `jit` cargo feature.
-
-```bash
-cargo run --features jit
-```
-
-This requires autoconf, automake, libtool, and clang to be installed.
-
-#### Using
-
-To compile a function, call `__jit__()` on it.
-
-```python
-def foo():
-    a = 5
-    return 10 + a
-
-foo.__jit__()  # this will compile foo to native code and subsequent calls will execute that native code
-assert foo() == 15
-```
-
-## Embedding RustPython into your Rust Applications
-
-Interested in exposing Python scripting in an application written in Rust,
-perhaps to allow quickly tweaking logic where Rust's compile times would be inhibitive?
-Then `examples/hello_embed.rs` and `examples/mini_repl.rs` may be of some assistance.
-
-## Disclaimer
-
-RustPython is in development, and while the interpreter certainly can be used
-in interesting use cases like running Python in WASM and embedding into a Rust
-project, do note that RustPython is not totally production-ready.
-
-Contribution is more than welcome! See our contribution section for more
-information on this.
-
-## Conference videos
-
-Checkout those talks on conferences:
-
-- [FOSDEM 2019](https://www.youtube.com/watch?v=nJDY9ASuiLc)
-- [EuroPython 2018](https://www.youtube.com/watch?v=YMmio0JHy_Y)
-
-## Use cases
-
-Although RustPython is a fairly young project, a few people have used it to
-make cool projects:
-
-- [GreptimeDB](https://github.com/GreptimeTeam/greptimedb): an open-source, cloud-native, distributed time-series database. Using RustPython for embedded scripting.
-- [pyckitup](https://github.com/pickitup247/pyckitup): a game engine written in
-  rust.
-- [Robot Rumble](https://github.com/robot-rumble/logic/): an arena-based AI competition platform
-- [Ruff](https://github.com/charliermarsh/ruff/): an extremely fast Python linter, written in Rust
-
-## Goals
-
-- Full Python-3 environment entirely in Rust (not CPython bindings)
-- A clean implementation without compatibility hacks
-
-## Documentation
-
-Currently along with other areas of the project, documentation is still in an
-early phase.
-
-You can read the [online documentation](https://docs.rs/rustpython) for the
-latest release, or the [user guide](https://rustpython.github.io/docs/).
-
-You can also generate documentation locally by running:
-
-```shell
-cargo doc # Including documentation for all dependencies
-cargo doc --no-deps --all # Excluding all dependencies
-```
-
-Documentation HTML files can then be found in the `target/doc` directory or you can append `--open` to the previous commands to
-have the documentation open automatically on your default browser.
-
-For a high level overview of the components, see the [architecture](architecture/architecture.md) document.
-
-## Contributing
-
-Contributions are welcome and highly appreciated. To get started, check out the
-[**contributing guidelines**](CONTRIBUTING.md).
-
-You can also join us on [**Discord**](https://discord.gg/vru8NypEhv).
-
-## Compiling to WebAssembly
-
-[See this doc](wasm/README.md)
-
-## Community
-
-[![Discord Banner](https://discordapp.com/api/guilds/1043121930691149845/widget.png?style=banner2)][discord]
-
-Chat with us on [Discord][discord].
-
-## Code of conduct
-
-Our code of conduct [can be found here](code-of-conduct.md).
-
-## Credit
-
-The initial work was based on
-[windelbouwman/rspython](https://github.com/windelbouwman/rspython) and
-[shinglyu/RustPython](https://github.com/shinglyu/RustPython)
-
-[discord]: https://discord.gg/vru8NypEhv
-
-## Links
-
-These are some useful links to related projects:
-
-- https://github.com/ProgVal/pythonvm-rust
-- https://github.com/shinglyu/RustPython
-- https://github.com/windelbouwman/rspython
-
-## License
-
-This project is licensed under the MIT license. Please see the
-[LICENSE](LICENSE) file for more details.
-
-The [project logo](logo.png) is licensed under the CC-BY-4.0
-license. Please see the [LICENSE-logo](LICENSE-logo) file
-for more details.
+- **MIT** for the code — see [LICENSE](LICENSE).
+- **CC-BY-4.0** for the logo — see [LICENSE-logo](LICENSE-logo).
+- The standard library (`Lib/`) is CPython's and is under the PSF license — see
+  `Lib/PSF-LICENSE`.
