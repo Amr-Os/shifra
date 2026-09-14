@@ -6,9 +6,11 @@ messages in Arabic and maps exception class names back to their Arabic
 spellings (see ``builtins.BUILTINS``). Rendering is best-effort: if anything
 fails it falls back to a minimal textual report so the original error is never
 lost.
+
+Deliberately avoids ``io``: the Android build ships without the ``fileio``
+feature, so importing ``io`` and even ``import io`` itself fails there.
 """
 
-import io
 import re
 import sys
 
@@ -234,15 +236,14 @@ def _ar_words(message):
     return message
 
 
-def _render(buf, exc_type, value, tb):
-    write = buf.write
-    write("تتبّع (آخر استدعاء أولاً):\n")
+def _render(lines, exc_type, value, tb):
+    lines.append("تتبّع (آخر استدعاء أولاً):")
     current = tb
     while current is not None:
         frame = current.tb_frame
         code = frame.f_code
-        write(
-            '  ملف "%s"، سطر %s، في %s\n'
+        lines.append(
+            '  ملف "%s"، سطر %s، في %s'
             % (code.co_filename, current.tb_lineno, code.co_name)
         )
         current = current.tb_next
@@ -252,45 +253,45 @@ def _render(buf, exc_type, value, tb):
     if isinstance(value, (SyntaxError, IndentationError, TabError)):
         filename = getattr(value, "filename", "???")
         lineno = getattr(value, "lineno", "?")
-        write('  ملف "%s"، سطر %s\n' % (filename, lineno))
+        lines.append('  ملف "%s"، سطر %s' % (filename, lineno))
         text = getattr(value, "text", None)
         if text:
             line = str(text).rstrip("\n")
-            write("    %s\n" % line)
+            lines.append("    " + line)
             offset = getattr(value, "offset", None)
             if offset:
-                write("    %s^\n" % (" " * max(0, int(offset) - 1)))
+                lines.append("    " + " " * max(0, int(offset) - 1) + "^")
         msg = getattr(value, "msg", _SENTINEL)
         if msg is _SENTINEL and value.args:
             msg = value.args[0]
         if msg is not _SENTINEL:
-            write("%s: %s\n" % (name, _ar_words(str(msg))))
+            lines.append("%s: %s" % (name, _ar_words(str(msg))))
         else:
-            write("%s\n" % name)
+            lines.append(name)
         return
 
     args = getattr(value, "args", ())
     if not args:
-        write("%s\n" % name)
+        lines.append(name)
     elif len(args) == 1:
         if isinstance(args[0], str):
-            write("%s: %s\n" % (name, _ar_words(args[0])))
+            lines.append("%s: %s" % (name, _ar_words(args[0])))
         else:
-            write("%s: %r\n" % (name, args[0]))
+            lines.append("%s: %r" % (name, args[0]))
     else:
-        write("%s: %s\n" % (name, ", ".join(repr(arg) for arg in args)))
+        lines.append("%s: %s" % (name, ", ".join(repr(arg) for arg in args)))
 
 
 def _render_plain(exc_type, value):
     try:
         name = getattr(exc_type, "__name__", str(exc_type))
         parts = " | ".join(repr(arg) for arg in getattr(value, "args", ()))
-        return "%s: %s\n" % (name, parts)
+        return "%s: %s" % (name, parts)
     except Exception:
         try:
-            return "%s\n" % (exc_type,)
+            return "%s" % (exc_type,)
         except Exception:
-            return str(exc_type) + "\n"
+            return str(exc_type)
 
 
 def shifra_excepthook(exc_type, value, tb):
@@ -300,14 +301,14 @@ def shifra_excepthook(exc_type, value, tb):
         except Exception:
             pass
         return
-    buf = io.StringIO()
+    lines = []
     try:
-        _render(buf, exc_type, value, tb)
+        _render(lines, exc_type, value, tb)
     except Exception:
-        buf = io.StringIO()
-        buf.write(_render_plain(exc_type, value))
+        lines = [_render_plain(exc_type, value)]
+    text = "\n".join(lines) + "\n"
     try:
-        sys.stderr.write(buf.getvalue())
+        sys.stderr.write(text)
     except Exception:
         pass
 
