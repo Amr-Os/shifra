@@ -1,11 +1,11 @@
 // spell-checker:ignore aheui
-//! Setting up a project with a frozen stdlib can be done *either* by using `rustpython::InterpreterBuilder` or `rustpython_vm::Interpreter::builder`.
+//! Setting up a project with a frozen stdlib can be done *either* by using `shifra::InterpreterBuilder` or `rustpython_vm::Interpreter::builder`.
 //! See each function for example.
 //!
 //! See also: `aheui-rust.md` for freezing your own package.
 
-use rustpython::InterpreterBuilderExt;
 use rustpython_vm::{PyResult, VirtualMachine};
+use shifra::InterpreterBuilderExt;
 
 fn run(keyword: &str, vm: &VirtualMachine) -> PyResult<()> {
     let json = vm.import("json", 0)?;
@@ -18,11 +18,11 @@ fn run(keyword: &str, vm: &VirtualMachine) -> PyResult<()> {
 }
 
 fn interpreter_with_config() {
-    let interpreter = rustpython::InterpreterBuilder::new()
+    let interpreter = shifra::InterpreterBuilder::new()
         .init_stdlib()
         .interpreter();
     // Use interpreter.enter to reuse the same interpreter later
-    interpreter.run(|vm| run("rustpython::InterpreterBuilder", vm));
+    interpreter.run(|vm| run("shifra::InterpreterBuilder", vm));
 }
 
 fn interpreter_with_vm() {

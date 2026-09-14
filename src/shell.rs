@@ -121,7 +121,7 @@ pub fn run_shell(vm: &VirtualMachine, scope: Scope) -> PyResult<()> {
     // Retrieve a `history_path_str` dependent on the OS
     let repl_history_path = match dirs::config_dir() {
         Some(mut path) => {
-            path.push("rustpython");
+            path.push("shifra");
             path.push("repl_history.txt");
             path
         }

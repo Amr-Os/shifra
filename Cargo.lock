@@ -3269,32 +3269,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "rustpython"
-version = "0.5.0"
-dependencies = [
- "codspeed-criterion-compat",
- "dirs",
- "env_logger",
- "flame",
- "flamescope",
- "lexopt",
- "libc",
- "log",
- "pyo3",
- "rustls",
- "rustls-graviola",
- "rustpython-arabiya",
- "rustpython-capi",
- "rustpython-compiler",
- "rustpython-pylib",
- "rustpython-ruff_python_parser",
- "rustpython-stdlib",
- "rustpython-vm",
- "rustyline",
- "winresource",
-]
-
-[[package]]
 name = "rustpython-arabiya"
 version = "0.1.0"
 dependencies = [
@@ -3990,6 +3964,32 @@ version = "0.2.0"
 source = "git+https://github.com/arihant2math/tkinter.git?tag=v0.2.0#198fc35b1f18f4eda401f97a641908f321b1403a"
 dependencies = [
  "bindgen 0.71.1",
+]
+
+[[package]]
+name = "shifra"
+version = "0.5.0"
+dependencies = [
+ "codspeed-criterion-compat",
+ "dirs",
+ "env_logger",
+ "flame",
+ "flamescope",
+ "lexopt",
+ "libc",
+ "log",
+ "pyo3",
+ "rustls",
+ "rustls-graviola",
+ "rustpython-arabiya",
+ "rustpython-capi",
+ "rustpython-compiler",
+ "rustpython-pylib",
+ "rustpython-ruff_python_parser",
+ "rustpython-stdlib",
+ "rustpython-vm",
+ "rustyline",
+ "winresource",
 ]
 
 [[package]]

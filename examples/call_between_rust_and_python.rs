@@ -1,8 +1,8 @@
-use rustpython::InterpreterBuilderExt;
-use rustpython::vm::{
+use rustpython_arabiya::translate;
+use shifra::InterpreterBuilderExt;
+use shifra::vm::{
     PyObject, PyPayload, PyResult, TryFromBorrowedObject, VirtualMachine, pyclass, pymodule,
 };
-use rustpython_arabiya::translate;
 
 /// Load a Shifra `.sf` file, translate it to AST-level Python, and execute it
 /// into a module registered under `name` so `vm.import(name)` finds it.
@@ -15,7 +15,7 @@ fn import_shifra_module(vm: &VirtualMachine, name: &str, sf_path: &str) -> PyRes
     rustpython_arabiya::install_builtins(&scope, vm)?;
 
     let code = vm
-        .compile(&translated, rustpython::vm::compiler::Mode::Exec, sf_path)
+        .compile(&translated, shifra::vm::compiler::Mode::Exec, sf_path)
         .map_err(|err| err.into_pyexception(vm, Some(&source)))?;
     vm.run_code_obj(code, scope.clone())?;
 
@@ -27,7 +27,7 @@ fn import_shifra_module(vm: &VirtualMachine, name: &str, sf_path: &str) -> PyRes
 }
 
 pub fn main() {
-    let builder = rustpython::Interpreter::builder(Default::default());
+    let builder = shifra::Interpreter::builder(Default::default());
     let def = rust_py_module::module_def(&builder.ctx);
     let interp = builder.init_stdlib().add_native_module(def).build();
 
@@ -66,7 +66,7 @@ pub fn main() {
 #[pymodule]
 mod rust_py_module {
     use super::*;
-    use rustpython::vm::{PyObjectRef, convert::ToPyObject};
+    use shifra::vm::{PyObjectRef, convert::ToPyObject};
 
     #[pyfunction]
     fn rust_function(

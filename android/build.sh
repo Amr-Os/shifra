@@ -48,18 +48,18 @@ abi_x86=x86_64
 rust_arm=aarch64-linux-android
 rust_x86=x86_64-linux-android
 
-bin_arm="$RUST_TARGET_DIR/$rust_arm/release/rustpython"
-bin_x86="$RUST_TARGET_DIR/$rust_x86/release/rustpython"
+bin_arm="$RUST_TARGET_DIR/$rust_arm/release/shifra"
+bin_x86="$RUST_TARGET_DIR/$rust_x86/release/shifra"
 
 mkdir -p "$app_dir/dist"
 
 if [[ "${RUST_BUILD:-0}" == "1" ]]; then
     echo "== cross-compiling interpreter =="
     cargo build --release --target "$rust_arm" \
-        --bin rustpython --no-default-features \
+        --bin shifra --no-default-features \
         --features stdlib,stdio,threading,importlib,freeze-stdlib
     cargo build --release --target "$rust_x86" \
-        --bin rustpython --no-default-features \
+        --bin shifra --no-default-features \
         --features stdlib,stdio,threading,importlib,freeze-stdlib
 fi
 

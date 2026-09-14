@@ -1,12 +1,13 @@
-//! This is the `rustpython` binary. If you're looking to embed RustPython into your application,
+//! This is the `shifra` binary. If you're looking to embed the interpreter into your application,
 //! you're likely looking for the [`rustpython_vm`] crate.
 //!
-//! You can install `rustpython` with `cargo install rustpython`. If you'd like to inject your
-//! own native modules, you can make a binary crate that depends on the `rustpython` crate (and
-//! probably [`rustpython_vm`], too), and make a `main.rs` that looks like:
+//! You can install `shifra` with `cargo install --git https://github.com/Amr-Os/shifra shifra`.
+//! If you'd like to inject your own native modules, you can make a binary crate that depends
+//! on the `shifra` crate (and probably [`rustpython_vm`], too), and make a `main.rs` that
+//! looks like:
 //!
 //! ```no_run
-//! use rustpython::{InterpreterBuilder, InterpreterBuilderExt};
+//! use shifra::{InterpreterBuilder, InterpreterBuilderExt};
 //! use rustpython_vm::{pymodule, py_freeze};
 //!
 //! fn main() -> std::process::ExitCode {
@@ -18,7 +19,7 @@
 //!         // Add a frozen module
 //!         .add_frozen_modules(py_freeze!(source = "def foo(): pass", module_name = "other_thing"));
 //!
-//!     rustpython::run(builder)
+//!     shifra::run(builder)
 //! }
 //!
 //! #[pymodule]
@@ -77,7 +78,7 @@ compile_error!(
     "Feature \"ssl\" is now enabled by either \"ssl-rustls\" or \"ssl-openssl\". Do not manually pass \"ssl\" feature. To enable ssl-openssl, use --no-default-features to disable ssl-rustls*"
 );
 
-/// The main cli of the `rustpython` interpreter. This function will return `std::process::ExitCode`
+/// The main cli of the `shifra` interpreter. This function will return `std::process::ExitCode`
 /// based on the return code of the python code ran through the cli.
 ///
 /// **Note**: This function provides no way to further initialize the VM after the builder is applied.
@@ -122,10 +123,10 @@ pub fn run(mut builder: InterpreterBuilder) -> ExitCode {
         feature = "capi" => {{
             let local_vm = interp.enter(|vm| vm.new_thread());
             rustpython_capi::init_main_interpreter(interp);
-            let result = local_vm.run(|vm| run_rustpython(vm, run_mode));
+            let result = local_vm.run(|vm| run_shifra(vm, run_mode));
             rustpython_capi::get_main_interpreter().take().unwrap().finalize(result.err())
         }},
-        _ => interp.run(move |vm| run_rustpython(vm, run_mode)),
+        _ => interp.run(move |vm| run_shifra(vm, run_mode)),
     };
 
     rustpython_vm::host_env::os::exit_code(exitcode)
@@ -153,7 +154,7 @@ __import__("io").TextIOWrapper(
 fn install_pip(installer: InstallPipMode, scope: Scope, vm: &VirtualMachine) -> PyResult<()> {
     if !cfg!(feature = "ssl") {
         return Err(
-            vm.new_system_error("install-pip requires rustpython be build with '--features=ssl'")
+            vm.new_system_error("install-pip requires shifra be build with '--features=ssl'")
         );
     }
 
@@ -257,23 +258,43 @@ fn run_file(vm: &VirtualMachine, scope: Scope, argv0: &str) -> PyResult<()> {
 /// compilation, then run with Arabic builtins installed. This is the native run
 /// path for Shifra files.
 fn run_shifra_file(vm: &VirtualMachine, scope: Scope, path: &str) -> PyResult<()> {
+    let t0 = std::time::Instant::now();
     rustpython_arabiya::install_builtins(&scope, vm)?;
+    let t1 = std::time::Instant::now();
     rustpython_arabiya::install_error_hook(vm)?;
+    let t2 = std::time::Instant::now();
     let source = match std::fs::read_to_string(path) {
         Ok(source) => source,
         Err(err) => return Err(vm.new_os_error(err.to_string())),
     };
+    let t3 = std::time::Instant::now();
     let translated = rustpython_arabiya::translate(&source);
+    let t4 = std::time::Instant::now();
     let code = vm
         .compile(&translated, vm::compiler::Mode::Exec, path)
         .map_err(|err| err.into_pyexception(vm, Some(&source)))?;
-    vm.run_code_obj(code, scope)?;
+    let t5 = std::time::Instant::now();
+    let result = vm.run_code_obj(code, scope);
+    let t6 = std::time::Instant::now();
+    if std::env::var_os("RUSTPYTHON_PROFILE_SHIFRA").is_some() {
+        let us = |a: std::time::Instant, b: std::time::Instant| (a.duration_since(b)).as_micros();
+        eprintln!(
+            "[shifra-profile] builtins={}us hook={}us read={}us translate={}us compile={}us exec={}us",
+            us(t1, t0),
+            us(t2, t1),
+            us(t3, t2),
+            us(t4, t3),
+            us(t5, t4),
+            us(t6, t5),
+        );
+    }
+    result?;
     Ok(())
 }
 
 /// Compile a script without executing it. Shifra files are translated first, so
 /// syntax errors are reported against the original Arabic source. Used for live
-/// editor diagnostics (`rustpython --check file`).
+/// editor diagnostics (`shifra --check file`).
 fn check_file(vm: &VirtualMachine, scope: Scope, path: &str) -> PyResult<()> {
     let source = match std::fs::read_to_string(path) {
         Ok(source) => source,
@@ -332,7 +353,7 @@ fn get_importer(path: &str, vm: &VirtualMachine) -> PyResult<Option<PyObjectRef>
 }
 
 // pymain_run_python
-fn run_rustpython(vm: &VirtualMachine, run_mode: RunMode) -> PyResult<()> {
+fn run_shifra(vm: &VirtualMachine, run_mode: RunMode) -> PyResult<()> {
     #[cfg(feature = "flame-it")]
     let main_guard = flame::start_guard("RustPython main");
 
@@ -382,11 +403,11 @@ fn run_rustpython(vm: &VirtualMachine, run_mode: RunMode) -> PyResult<()> {
         && (vm.state.config.settings.verbose > 0 || (is_repl && std::io::stdin().is_terminal()))
     {
         eprintln!(
-            "Welcome to the magnificent Rust Python {} interpreter \u{1f631} \u{1f596}",
+            "Welcome to the magical Shifra Arabic Python {} interpreter \u{1f631} \u{1f596}",
             env!("CARGO_PKG_VERSION")
         );
         eprintln!(
-            "RustPython {}.{}.{}",
+            "Shifra {}.{}.{}",
             vm::version::MAJOR,
             vm::version::MINOR,
             vm::version::MICRO,

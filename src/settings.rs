@@ -7,7 +7,7 @@ use std::{cmp, env};
 
 pub enum RunMode {
     Script(String),
-    /// Compile a script without executing it (`rustpython --check file`). The
+    /// Compile a script without executing it (`shifra --check file`). The
     /// file may be a Shifra (`.sf`) source; it is translated before compiling.
     Check(String),
     Command(String),
@@ -207,7 +207,7 @@ fn parse_args() -> Result<(CliArgs, RunMode, Vec<String>), lexopt::Error> {
 }
 
 fn help(parser: lexopt::Parser) -> ! {
-    let usage = USAGE_STRING.replace("{PROG}", parser.bin_name().unwrap_or("rustpython"));
+    let usage = USAGE_STRING.replace("{PROG}", parser.bin_name().unwrap_or("shifra"));
     print!("{usage}");
     std::process::exit(0);
 }

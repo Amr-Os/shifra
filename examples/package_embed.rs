@@ -1,8 +1,8 @@
-use rustpython::vm;
-use rustpython::vm::PyResult;
-use rustpython::vm::builtins::PyStrRef;
-use rustpython::vm::{Interpreter, VirtualMachine};
 use rustpython_arabiya::translate;
+use shifra::vm;
+use shifra::vm::PyResult;
+use shifra::vm::builtins::PyStrRef;
+use shifra::vm::{Interpreter, VirtualMachine};
 use std::process::ExitCode;
 
 /// Load a Shifra `.sf` file, translate it to Python, and execute it into a

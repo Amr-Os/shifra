@@ -130,8 +130,8 @@
       "properties": {
         "shifra.runtime.command": {
           "type": "string",
-          "default": "/home/amr/Desktop/codes/Arabic/RustPython/target/release/rustpython",
-          "markdownDescription": "Command used to run `.ar/.sf/.شفـ` files. When empty, the extension searches for a Shifra/RustPython checkout (the `shifra.runtime.projectDir` setting, `SHIFRA_DIR`, `RUSTPYTHON_DIR`, an open workspace, or the extension's own folder when developing) and uses its built `rustpython` binary — preferring `target/release/rustpython` for speed, falling back to `target/debug/rustpython`, then `cargo run --release --manifest-path`."
+          "default": "/home/amr/Desktop/codes/Arabic/RustPython/target/release/shifra",
+          "markdownDescription": "Command used to run `.ar/.sf/.شفـ` files. When empty, the extension searches for a Shifra/RustPython checkout (the `shifra.runtime.projectDir` setting, `SHIFRA_DIR`, `RUSTPYTHON_DIR`, an open workspace, or the extension's own folder when developing) and uses its built `rustpython` binary — preferring `target/release/shifra` for speed, falling back to `target/debug/shifra`, then `cargo run --release --manifest-path`."
         },
         "shifra.runtime.projectDir": {
           "type": "string",

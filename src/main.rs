@@ -1,4 +1,4 @@
-use rustpython::{InterpreterBuilder, InterpreterBuilderExt};
+use shifra::{InterpreterBuilder, InterpreterBuilderExt};
 
 pub fn main() -> std::process::ExitCode {
     let mut config = InterpreterBuilder::new();
@@ -6,5 +6,5 @@ pub fn main() -> std::process::ExitCode {
     {
         config = config.init_stdlib();
     }
-    rustpython::run(config)
+    shifra::run(config)
 }

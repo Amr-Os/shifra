@@ -1,6 +1,6 @@
 use rustpython_vm::InterpreterBuilder;
 
-/// Extension trait for InterpreterBuilder to add rustpython-specific functionality.
+/// Extension trait for InterpreterBuilder to add shifra-specific functionality.
 pub trait InterpreterBuilderExt {
     /// Initialize the Python standard library.
     ///

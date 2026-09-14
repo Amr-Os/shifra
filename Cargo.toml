@@ -1,6 +1,6 @@
 [package]
-name = "rustpython"
-description = "A python interpreter written in rust."
+name = "shifra"
+description = "An Arabic Python 3 interpreter written in Rust."
 include = ["LICENSE", "Cargo.toml", "src/**/*.rs"]
 version.workspace = true
 authors.workspace = true
@@ -73,12 +73,12 @@ name = "microbenchmarks"
 harness = false
 
 [[bin]]
-name = "rustpython"
+name = "shifra"
 path = "src/main.rs"
 
 [[example]]
 name = "arabiya_runner"
-path = "examples/to_be_deleted/arabiya.rs"
+path = "examples/arabiya_runner.rs"
 
 [[example]]
 name = "custom_tls_providers"
@@ -137,13 +137,13 @@ parking_lot_core = { git = "https://github.com/youknowone/parking_lot", branch =
 # REDOX END
 
 [package.metadata.packager]
-product-name = "RustPython"
-identifier = "com.rustpython.rustpython"
-description = "An open source Python 3 interpreter written in Rust"
-homepage = "https://rustpython.github.io/"
+product-name = "Shifra"
+identifier = "com.shifra.language"
+description = "An Arabic Python 3 interpreter written in Rust"
+homepage = "https://github.com/Amr-Os/shifra"
 license_file = "LICENSE"
-authors = ["RustPython Team"]
-publisher = "RustPython Team"
+authors = ["Shifra contributors"]
+publisher = "Shifra contributors"
 resources = ["LICENSE", "README.md", "Lib"]
 icons = ["32x32.png"]
 
@@ -168,7 +168,7 @@ version = "0.5.0"
 authors = ["RustPython Team"]
 edition = "2024"
 rust-version = "1.95.0"
-repository = "https://github.com/RustPython/RustPython"
+repository = "https://github.com/Amr-Os/shifra"
 license = "MIT"
 
 [workspace.dependencies]

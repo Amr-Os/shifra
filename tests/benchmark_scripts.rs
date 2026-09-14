@@ -1,5 +1,5 @@
 // cspell:ignore pyperformance nqueens pidigits
-use rustpython::{InterpreterBuilder, InterpreterBuilderExt};
+use shifra::{InterpreterBuilder, InterpreterBuilderExt};
 use std::{fs, path::Path};
 
 const PYPERFORMANCE_BENCHMARKS: &[&str] = &[
@@ -21,7 +21,7 @@ const PYPERFORMANCE_BENCHMARKS: &[&str] = &[
 ];
 
 #[test]
-fn pyperformance_benchmarks_run_in_rustpython() {
+fn pyperformance_benchmarks_run_in_shifra() {
     let benchmark_dir = Path::new("benches/benchmarks");
 
     for name in PYPERFORMANCE_BENCHMARKS {
@@ -35,7 +35,7 @@ fn pyperformance_benchmarks_run_in_rustpython() {
             .interpreter()
             .enter(|vm| {
                 let code = vm
-                    .compile(&source, rustpython::vm::compiler::Mode::Exec, &*source_path)
+                    .compile(&source, shifra::vm::compiler::Mode::Exec, &*source_path)
                     .unwrap_or_else(|err| panic!("failed to compile {}: {err}", path.display()));
                 let scope = vm.new_scope_with_builtins();
                 if let Err(err) = vm.run_code_obj(code, scope) {

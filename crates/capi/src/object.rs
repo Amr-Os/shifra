@@ -524,7 +524,7 @@ mod tests {
                 .str()
                 .unwrap();
 
-            assert_eq!(implementation, "rustpython");
+            assert_eq!(implementation, "shifra");
         })
     }
 

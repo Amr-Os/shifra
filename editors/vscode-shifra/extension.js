@@ -125,7 +125,7 @@ function resolveRunner(uri) {
         vscode.workspace.getWorkspaceFolder(uri)?.uri.fsPath ??
         fileDir;
 
-    for (const rel of ["target/release/rustpython", "target/debug/rustpython"]) {
+    for (const rel of ["target/release/shifra", "target/debug/shifra"]) {
         const bin = path.join(repoRoot, rel);
         if (fs.existsSync(bin)) {
             return { command: shellQuote(bin), cwd: fileDir };
@@ -221,7 +221,7 @@ function interpreterCommand() {
         (vscode.workspace.workspaceFolders?.[0]?.uri.fsPath
             ? findWorkspaceRoot(vscode.workspace.workspaceFolders[0].uri.fsPath)
             : undefined);
-    for (const rel of ["target/release/rustpython", "target/debug/rustpython"]) {
+    for (const rel of ["target/release/shifra", "target/debug/shifra"]) {
         const bin = repoRoot && path.join(repoRoot, rel);
         if (bin && fs.existsSync(bin)) {
             return { command: bin, args: [] };
